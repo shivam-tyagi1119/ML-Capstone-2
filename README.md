@@ -76,54 +76,7 @@ Key fields:
 
 Use `flask_ping.py` to verify the server is running before running `test.py`.
 
-## Testing & visibility
-To make the repository more visible and reliable:
-- Keep `test.py` simple and deterministic so it can be run in CI (it should not require external services or long-running training).
-- Add a CI workflow (GitHub Actions) to run the test after pushes/PRs and publish a status badge in this README.
 
-Sample GitHub Actions workflow you can add to `.github/workflows/ci.yml`:
-```yaml
-name: CI - train & test
-
-on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-      - name: Train model
-        run: |
-          cd Scripts
-          python train.py
-      - name: Start server in background
-        run: |
-          cd Scripts
-          nohup python predict.py & sleep 3
-      - name: Run test
-        run: |
-          cd Scripts
-          python test.py
-```
-
-Add the Actions status badge to the top of this README (replace `OWNER/REPO` with your values):
-```
-[![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-```
-
-Running CI and showing the badge significantly improves project discoverability and trustworthiness for visitors.
 
 ## Example payloads & curl
 Sample JSON payload (single record):
